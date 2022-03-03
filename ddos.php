@@ -104,6 +104,7 @@ class Doser {
 
 				if ($info['msg'] == CURLMSG_DONE) {
 
+					$init = $info['handle'];
 					if($this->showResult) {
 						$init = $info['handle'];
 						$page = array_search($init, $job);
